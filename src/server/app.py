@@ -6,7 +6,8 @@ import os
 import glob
 import concurrent.futures
 import urllib.request
-from urllib.parse import urlencode
+
+from urllib.parse import urlencode, urlparse
 
 from flask import (Flask, render_template, send_from_directory,
                    request, make_response, jsonify)
@@ -26,8 +27,21 @@ APP.config['STATIC_DIR'] = STATIC_DIR
 
 
 @APP.route('/static/<path:path>')
-def send_static(path):
+def handler_static(path):
     return send_from_directory(APP.config['STATIC_DIR'], path)
+
+
+@APP.route('/artslist/')
+def get_artslist():
+    combine_path = os.path.join(RESOURCE_DIR, '20190410.json')
+
+    with open(combine_path, 'r') as filed:
+        itemlist = json.loads(filed.read())
+
+    itemlist = [{'link': item, 'domain': urlparse(
+        item).netloc} for item in itemlist]
+    context = {'itemlist': itemlist}
+    return render_template('artslist.html', **context)
 
 
 @APP.route('/')
@@ -97,7 +111,6 @@ def concurrent_check_urls(urls):
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
 
         for value, result in zip(urls, executor.map(is_active_url, urls)):
-            print(value, result)
             results.append(result)
 
     return results

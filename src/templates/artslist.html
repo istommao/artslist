@@ -19,6 +19,27 @@
         <!--[if gt IE 8]><!-->
             <link rel="stylesheet" href="/static/css/layouts/marketing.css">
         <!--<![endif]-->
+    <style>
+        .main-list {
+            max-width: 1080px;
+            text-indent: 1em;
+            margin: 0 auto;
+        }
+        .cardBody {
+            border: 1px solid #eee;
+            margin: 0 0.5em 2em;
+            padding: 0 0 3em;
+            height: 200px;
+        }
+        .cardItem {
+            /*background: #288ED3;*/
+            /*color: white;*/
+        }
+        .cardItem a {
+            text-decoration: none;
+            color: #288ED3;
+        }
+    </style>
 </head>
 <body>
 
@@ -34,23 +55,24 @@
     </div>
 </div>
 
-<div class="splash-container">
-    <div class="splash">
-        <h1 class="splash-head">ARTS readlist</h1>
-        <p class="splash-subhead">
-            Answers: {{ total_answers }}  Links: {{ total_links }}
-        </p>
-        <p>
-            <a href="/artslist/" class="pure-button pure-button-primary">View</a>
-        </p>
+<div style="margin-top:5em"></div>
+
+<div class="main-list pure-g">
+
+    {% for item in itemlist %}
+    <div class="pure-u-1 pure-u-md-1-4">
+        <div class="cardBody">
+            <h3>{{ item.domain }}</h3>
+            <p>description</p>
+            <div class="cardItem">
+                <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">view</a>
+            </div>
+        </div>
     </div>
+    {% endfor %}
+
 </div>
 
-<div class="content-wrapper">
-    <div class="footer l-box is-center">
-        Arts read list
-    </div>
-</div>
 
 </body>
 </html>
