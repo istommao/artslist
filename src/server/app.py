@@ -3,6 +3,11 @@ import json
 import datetime
 import os
 
+import glob
+import concurrent.futures
+import urllib.request
+from urllib.parse import urlencode
+
 from flask import (Flask, render_template, send_from_directory,
                    request, make_response, jsonify)
 
@@ -60,3 +65,39 @@ def collect_items():
         filed.write(json.dumps(itemlist, indent=4, ensure_ascii=False))
 
     return response
+
+
+def combine_json_file(folderpath):
+    itemlist = []
+    jsonpath = os.path.join(RESOURCE_DIR, '*.json')
+    for fhd in glob.glob(jsonpath):
+        with open(fhd, 'r') as infile:
+            itemlist.extend(json.loads(infile.read()))
+
+    itemlist = list(set(itemlist))
+    # results = concurrent_check_urls(itemlist)
+
+    combine_path = os.path.join(RESOURCE_DIR, folderpath + '.json')
+    with open(combine_path, 'w') as filed:
+        filed.write(json.dumps(itemlist, indent=4, ensure_ascii=False))
+
+
+def is_active_url(url):
+    try:
+        urllib.request.urlopen(urlencode(url))
+        retdata = {'url': url, 'is_active': True}
+    except urllib.error.HTTPError as error:
+        retdata = {'url': url, 'is_active': error.code < 500}
+
+    return retdata
+
+
+def concurrent_check_urls(urls):
+    results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+
+        for value, result in zip(urls, executor.map(is_active_url, urls)):
+            print(value, result)
+            results.append(result)
+
+    return results
