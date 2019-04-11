@@ -7,7 +7,9 @@ import glob
 import concurrent.futures
 import urllib.request
 
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlencode, urlparse, quote
+
+import lxml.html
 
 from flask import (Flask, render_template, send_from_directory,
                    request, make_response, jsonify)
@@ -33,13 +35,16 @@ def handler_static(path):
 
 @APP.route('/artslist/')
 def get_artslist():
-    combine_path = os.path.join(RESOURCE_DIR, '20190410.json')
+    combine_path = os.path.join(RESOURCE_DIR, 'artslist.json')
 
     with open(combine_path, 'r') as filed:
         itemlist = json.loads(filed.read())
 
-    itemlist = [{'link': item, 'domain': urlparse(
-        item).netloc} for item in itemlist]
+    itemlist = [
+        {'title': item['title'], 'link': item['link'],
+         'domain': urlparse(item['link']).netloc}
+        for item in itemlist
+    ]
     context = {'itemlist': itemlist}
     return render_template('artslist.html', **context)
 
@@ -64,41 +69,43 @@ def collect_items():
         return response
 
     now = datetime.datetime.today()
-    folderpath = now.strftime('%Y%m%d')
+    foldername = now.strftime('%Y%m%d')
 
+    folderpath = os.path.join(RESOURCE_DIR, foldername)
     if not os.path.exists(folderpath):
         os.mkdir(folderpath)
 
     reqdata = request.json
     itemlist = reqdata['arrlist']
 
-    filename = '{}-page{}.json'.format(folderpath, str(reqdata['page']))
+    filename = '{}-page{}.json'.format(foldername, str(reqdata['page']))
 
-    path = os.path.join(RESOURCE_DIR, filename)
+    path = os.path.join(RESOURCE_DIR, foldername, filename)
     with open(path, 'w') as filed:
         filed.write(json.dumps(itemlist, indent=4, ensure_ascii=False))
 
     return response
 
 
-def combine_json_file(folderpath):
+def combine_json_file(foldername):
     itemlist = []
-    jsonpath = os.path.join(RESOURCE_DIR, '*.json')
+
+    jsonpath = os.path.join(RESOURCE_DIR, foldername, '*.json')
     for fhd in glob.glob(jsonpath):
         with open(fhd, 'r') as infile:
             itemlist.extend(json.loads(infile.read()))
 
     itemlist = list(set(itemlist))
-    # results = concurrent_check_urls(itemlist)
+    results = concurrent_get_title(itemlist)
 
-    combine_path = os.path.join(RESOURCE_DIR, folderpath + '.json')
+    combine_path = os.path.join(RESOURCE_DIR, 'artslist.json')
     with open(combine_path, 'w') as filed:
-        filed.write(json.dumps(itemlist, indent=4, ensure_ascii=False))
+        filed.write(json.dumps(results, indent=4, ensure_ascii=False))
 
 
 def is_active_url(url):
     try:
-        urllib.request.urlopen(urlencode(url))
+        urllib.request.urlopen(quote(url))
         retdata = {'url': url, 'is_active': True}
     except urllib.error.HTTPError as error:
         retdata = {'url': url, 'is_active': error.code < 500}
@@ -114,3 +121,43 @@ def concurrent_check_urls(urls):
             results.append(result)
 
     return results
+
+
+def concurrent_get_title(urls, max_workers=4):
+    results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+
+        for url, result in zip(urls, executor.map(get_url_title, urls)):
+            results.append({'link': url, 'title': result})
+            print(url, result)
+
+    return results
+
+
+def get_url_title(url):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+    }
+    try:
+        req = urllib.request.Request(
+            quote(url, safe='/:?='), headers=headers)
+    except ValueError:
+        print('urlerror', url)
+        return url
+
+    try:
+        k = urllib.request.urlopen(req, timeout=8)
+        data = k.read()
+    except (urllib.error.HTTPError, urllib.error.URLError) as error:
+        return 'error: %s' % error.reason
+    except Exception as error:
+        print(error)
+        return url
+
+    try:
+        fe = lxml.html.fromstring(data.decode())
+        title = fe.find('.//title').text or urlparse(url).netloc
+    except (AttributeError, ValueError, lxml.etree.ParserError):
+        title = urlparse(url).netloc
+
+    return title.strip()

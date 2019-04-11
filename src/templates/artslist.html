@@ -29,19 +29,24 @@
         .cardBody {
             background: white;
             border: 1px solid #eee;
+
             margin: 0 0.5em 2em;
             padding: 0 0 3em;
             height: 280px;
             border-radius: 4px;
             transition: .3s all linear;
-            box-shadow: 0 4px 8px 0 rgba(7, 17, 27, 0.1);
+            /*box-shadow: 0 4px 8px 0 rgba(7, 17, 27, 0.1);*/
             position:relative;
         }
         .cardItem {
+            padding: 10px;
+             word-wrap:break-word;
         }
         .cardFooter a {
             text-decoration: none;
             color: white;
+            display: block;
+            width: 100%;
         }
         .cardFooter {
             position: absolute;
@@ -50,12 +55,11 @@
             width: 100%;
             height: 3em;
             line-height: 3em;
-            background: #7A749A;
+            background: #7A7498;
             text-align: center;
             color: white;
-            border: 1px solid #7A749A;
-
             box-sizing: border-box;
+            border-top: 2px solid #9C98AD;
             border-bottom-right-radius: 4px;
             border-bottom-left-radius: 4px;
         }
@@ -83,8 +87,8 @@
     <div class="pure-u-1 pure-u-md-1-4">
         <div class="cardBody">
             <h3>{{ item.domain }}</h3>
-            <p>description</p>
             <div class="cardItem">
+                {{ item.title }}
             </div>
             <div class="cardFooter">
                 <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">view</a>
