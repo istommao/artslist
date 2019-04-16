@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ArtsList">
+    <title>ArtsList</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+    <!--<![endif]-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/layouts/marketing-old-ie.css">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+            <link rel="stylesheet" href="/static/css/layouts/marketing.css">
+        <!--<![endif]-->
+    <style>
+        body {background: #F2F2F2;}
+        .main-list {
+            max-width: 1080px;
+            text-indent: 1em;
+            margin: 0 auto;
+        }
+        .cardBody {
+            background: white;
+            border: 1px solid #eee;
+
+            margin: 0 0.5em 2em;
+            padding: 0 0 3em;
+            height: 45em;
+            border-radius: 4px;
+            transition: .3s all linear;
+            /*box-shadow: 0 4px 8px 0 rgba(7, 17, 27, 0.1);*/
+            position:relative;
+        }
+        .cardItem {
+            padding: 10px;
+            word-wrap:break-word;
+        }
+        .cardFooter a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            width: 100%;
+        }
+        .cardFooter {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3em;
+            line-height: 3em;
+            background: #7A7498;
+            text-align: center;
+            color: white;
+            box-sizing: border-box;
+            border-top: 2px solid #9C98AD;
+            border-bottom-right-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="">ArtsList</a>
+
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item pure-menu-selected"><a href="/" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="https://github.com/istommao/artslist" class="pure-menu-link">Github</a></li>
+        </ul>
+    </div>
+</div>
+
+<div style="margin-top:5em"></div>
+
+<div class="main-list pure-g">
+
+    <div class="pure-u-1 pure-u-md-1-1">
+        <div class="cardBody">
+            <p>From codingcat</p>
+            <div class="cardItem">
+                <h2>HTTPS小记</h2>
+                <p>超文本传输安全协定（英语：Hypertext Transfer Protocol Secure，缩写：HTTPS，常称为HTTP over TLS，HTTP over SSL或HTTP Secure）是一种透过计算机网路进行安全通讯的传输协议。HTTPS经由HTTP进行通讯，但利用SSL/TLS来加密封包。HTTPS开发的主要目的，是提供对网站伺服器的身份认证，保护交换资料的隐私与完整性。这个协议由网景公司（Netscape）在1994年首次提出，随后扩展到网际网路上。历史上，HTTPS连接经常用于万维网上的交易支付和企业信息系统中敏感信息的传输。在2000年代末至2010年代初，HTTPS开始广泛使用，以确保各类型的网页真实，保护帐户和保持用户通信，身份和网络浏览的私密性。</p>
+<p>
+另外，还有一种安全超文本传输协议（S-HTTP）的HTTP安全传输实现，但是HTTPS的广泛应用而成为事实上的HTTP安全传输实现，S-HTTP并没有得到广泛支持。</p>
+            </div>
+            <div class="cardFooter">
+                <a href="#" target="_blank" rel="noopener noreferrer">view</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
