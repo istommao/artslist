@@ -29,10 +29,9 @@
         .cardBody {
             background: white;
             border: 1px solid #eee;
-
             margin: 0 0.5em 2em;
             padding: 0 0 3em;
-            height: 45em;
+            min-height: 45em;
             border-radius: 4px;
             transition: .3s all linear;
             /*box-shadow: 0 4px 8px 0 rgba(7, 17, 27, 0.1);*/
@@ -49,9 +48,10 @@
             width: 100%;
         }
         .cardFooter {
-            position: absolute;
-            bottom: 0;
+            /*position: relative;*/
+            /*bottom: 0;*/
             left: 0;
+            margin-top: 10px;
             width: 100%;
             height: 3em;
             line-height: 3em;
@@ -86,7 +86,7 @@
     <div class="pure-u-1 pure-u-md-1-1">
         <div class="cardBody">
             <p>From codingcat</p>
-            <div class="cardItem">
+            <!-- <div class="cardItem">
                 <h2>HTTPS小记</h2>
                 <p>超文本传输安全协定（英语：Hypertext Transfer Protocol Secure，缩写：HTTPS，常称为HTTP over TLS，HTTP over SSL或HTTP Secure）是一种透过计算机网路进行安全通讯的传输协议。HTTPS经由HTTP进行通讯，但利用SSL/TLS来加密封包。HTTPS开发的主要目的，是提供对网站伺服器的身份认证，保护交换资料的隐私与完整性。这个协议由网景公司（Netscape）在1994年首次提出，随后扩展到网际网路上。历史上，HTTPS连接经常用于万维网上的交易支付和企业信息系统中敏感信息的传输。在2000年代末至2010年代初，HTTPS开始广泛使用，以确保各类型的网页真实，保护帐户和保持用户通信，身份和网络浏览的私密性。</p>
 <p>
@@ -94,6 +94,46 @@
             </div>
             <div class="cardFooter">
                 <a href="#" target="_blank" rel="noopener noreferrer">view</a>
+            </div>
+        -->
+
+            <div class="cardItem">
+<pre>
+十进制 十六进制    缩写  可以显示的表示法    名称/意义
+0   00  NUL ␀   空字符（Null）
+1   01  SOH ␁   标题开始
+2   02  STX ␂   本文开始
+3   03  ETX ␃   本文结束
+4   04  EOT ␄   传输结束
+5   05  ENQ ␅   请求
+6   06  ACK ␆   确认回应
+7   07  BEL ␇   响铃
+8   08  BS  ␈   退格
+9   09  HT  ␉   水平定位符号
+10  0A  LF  ␊   换行键
+11  0B  VT  ␋   垂直定位符号
+12  0C  FF  ␌   换页键
+13  0D  CR  ␍   归位键
+14  0E  SO  ␎   取消变换（Shift out）
+15  0F  SI  ␏   启用变换（Shift in）
+16  10  DLE ␐   跳出数据通讯
+17  11  DC1 ␑   设备控制一（XON 启用软件速度控制）
+18  12  DC2 ␒   设备控制二
+19  13  DC3 ␓   设备控制三（XOFF 停用软件速度控制）
+20  14  DC4 ␔   设备控制四
+21  15  NAK ␕   确认失败回应
+22  16  SYN ␖   同步用暂停
+23  17  ETB ␗   区块传输结束
+24  18  CAN ␘   取消
+25  19  EM  ␙   连接介质中断
+26  1A  SUB ␚   替换
+27  1B  ESC ␛   跳出
+28  1C  FS  ␜   文件分割符
+29  1D  GS  ␝   组群分隔符
+30  1E  RS  ␞   记录分隔符
+31  1F  US  ␟   单元分隔符
+127 7F  DEL ␡   删除
+</pre>
             </div>
         </div>
     </div>

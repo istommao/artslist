@@ -1,5 +1,7 @@
 """core tools."""
+import os
 import glob
+import json
 import concurrent.futures
 import urllib.request
 
@@ -11,6 +13,25 @@ import asyncio
 
 from requests_html import AsyncHTMLSession as AsyncRequestHTMLSession
 
+PROJECT_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.dirname(os.path.abspath(__file__))))
+
+RESOURCE_DIR = os.path.join(PROJECT_DIR, 'resource')
+
+
+def filter_itemlist(itemlist):
+    lst = []
+    for i in itemlist:
+        if i == 'undefined':
+            continue
+        if i.startswith('https://fanyi.baidu.com'):
+            continue
+
+        lst.append(i)
+
+    return lst
+
 
 def combine_json_file(foldername):
     itemlist = []
@@ -21,6 +42,8 @@ def combine_json_file(foldername):
             itemlist.extend(json.loads(infile.read()))
 
     itemlist = list(set(itemlist))
+    itemlist = filter_itemlist(itemlist)
+
     results = concurrent_get_title(itemlist)
 
     combine_path = os.path.join(RESOURCE_DIR, 'artslist.json')
@@ -30,7 +53,7 @@ def combine_json_file(foldername):
 
 def is_active_url(url):
     try:
-        urllib.request.urlopen(quote(url))
+        urllib.request.urlopen(quote(url, safe='/:?='))
         retdata = {'url': url, 'is_active': True}
     except urllib.error.HTTPError as error:
         retdata = {'url': url, 'is_active': error.code < 500}
@@ -88,32 +111,32 @@ def get_url_title(url):
     return title.strip()
 
 
-class AsyncRequestSession(AsyncRequestHTMLSession):
+# class AsyncRequestSession(AsyncRequestHTMLSession):
 
-    def run_with_args(self, coros_list):
-        tasks = [
-            asyncio.ensure_future(coro(args)) for coro, args in coros_list
-        ]
-        done, _ = self.loop.run_until_complete(asyncio.wait(tasks))
-        return [t.result() for t in done]
-
-
-asession = AsyncRequestSession()
+#     def run_with_args(self, coros_list):
+#         tasks = [
+#             asyncio.ensure_future(coro(args)) for coro, args in coros_list
+#         ]
+#         done, _ = self.loop.run_until_complete(asyncio.wait(tasks))
+#         return [t.result() for t in done]
 
 
-async def get_url_title(url):
-    try:
-        r = await asession.get(url)
-    except Exception as error:
-        return str(error)
-
-    return r
+# asession = AsyncRequestSession()
 
 
-def async_get_url_list_title(url_list):
-    coros_list = [
-        (get_url_title, url) for url in url_list
-    ]
-    results = asession.run_with_args(coros_list)
+# async def get_url_title(url):
+#     try:
+#         r = await asession.get(url)
+#     except Exception as error:
+#         return str(error)
 
-    return results
+#     return r
+
+
+# def async_get_url_list_title(url_list):
+#     coros_list = [
+#         (get_url_title, url) for url in url_list
+#     ]
+#     results = asession.run_with_args(coros_list)
+
+#     return results
